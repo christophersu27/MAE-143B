@@ -1,0 +1,33 @@
+%Q2a
+wg = 10;
+T  = tand(5);
+a = 100*T; b = -99*wg; c = T*wg^2;
+p_roots = roots([a b c]);
+p = min(p_roots);
+z = 100*p;
+D_lag = tf([1 z], [1 p]);
+
+figure;
+bode(D_lag);
+grid on;
+title('Bode Plot of D_{lag}(s) = (s+z)/(s+p),  z = 0.8838,  p = 0.008838');
+
+%Q2b
+% q.2a single lag
+p1 = 0.008837929007779029;
+z1 = 100*p1;
+D_lag = tf([1 z1], [1 p1]);
+
+% q.2b double lag
+wg = 10; T2 = tand(2.5);
+a = 10*T2; b = -9*wg; c = T2*wg^2;
+p_roots = roots([a b c]);
+p2 = min(p_roots);
+z2 = 10*p2;
+D_double_lag = (tf([1 z2],[1 p2]))^2;
+
+figure;
+bode(D_lag, D_double_lag);
+grid on;
+legend('D_{lag} (q.2a)', 'D_{double-lag} (q.2b)', 'Location', 'best');
+title('Bode Plot: D_{lag} (q.2a) overlaid with D_{double-lag} (q.2b)');
