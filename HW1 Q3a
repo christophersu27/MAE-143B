@@ -1,0 +1,11 @@
+wc = 299.5;
+num = [wc^4];
+den = [1, 2.6131*wc, 3.4142*wc^2, 2.6131*wc^3, wc^4];
+D_LPF4 = tf(num, den);
+
+figure('Name', '4th-Order Butterworth LPF');
+bode(D_LPF4);
+grid on;
+title('Bode Plot of D_{LPF4-Butterworth}');
+hold on;
+hold off;
