@@ -1,0 +1,9 @@
+z = 20 - 10*sqrt(3);
+p = 20 + 10*sqrt(3);
+D_lead = tf([1 z], [1 p]);
+
+figure;
+bode(D_lead);
+grid on;
+title('Bode Plot of D_{lead}(s) = (s+z)/(s+p),  z = 2.6795,  p = 37.3205');
+hold on;
