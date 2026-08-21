@@ -1,0 +1,31 @@
+%Q3a
+wc = 299.5;
+num = [wc^4];
+den = [1, 2.6131*wc, 3.4142*wc^2, 2.6131*wc^3, wc^4];
+D_LPF4 = tf(num, den);
+
+figure('Name', '4th-Order Butterworth LPF');
+bode(D_LPF4);
+grid on;
+title('Bode Plot of D_{LPF4-Butterworth}');
+hold on;
+hold off;
+
+%Q3b
+wc = 299.5;
+num_bw = [wc^4];
+den_bw = [1, 2.6131*wc, 3.4142*wc^2, 2.6131*wc^3, wc^4];
+D_LPF4 = tf(num_bw, den_bw);
+num_inv_cheb = [0.001, 0, 7665, 0, 7.346e9];
+den_inv_cheb = [1, 758.1, 2.874e5, 6.411e7, 7.346e9];
+D_LPF4_Inv_Cheb = tf(num_inv_cheb, den_inv_cheb);
+figure('Name', 'Filter Comparison');
+bode(D_LPF4, 'b-', D_LPF4_Inv_Cheb, 'r--');
+grid on;
+
+title('Comparison: Butterworth vs Inverse Chebyshev LPF');
+legend('Butterworth (q.3a)', 'Inverse Chebyshev (q.3b)', 'Location', 'southwest');
+hold on;
+xline(10, ':k', '\omega_g = 10 rad/s', 'LabelVerticalAlignment', 'bottom', ...
+    'HandleVisibility', 'off');
+hold off;
