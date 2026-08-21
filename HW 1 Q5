@@ -1,0 +1,44 @@
+%Q5b
+G = tf(100, [1, 0, -100]);
+z_simple = 10;
+p_simple = 20.34;
+D_simple = tf([1, z_simple], [1, p_simple]);
+z_lead = 2.68; p_lead = 37.32;
+D_lead = tf([1, z_lead], [1, p_lead]);
+z_lag = 0.485; p_lag = 0.0485;
+num_lag = conv([1, z_lag], [1, z_lag]);
+den_lag = conv([1, p_lag], [1, p_lag]);
+D_double_lag = tf(num_lag, den_lag);
+num_ic = [0.001, 0, 7665, 0, 7.346e9];
+den_ic = [1, 758.1, 2.874e5, 6.411e7, 7.346e9];
+D_ic = tf(num_ic, den_ic);
+D_unscaled = D_lead * D_double_lag * D_ic;
+L_unscaled = G * D_unscaled;
+[mag, ~] = bode(L_unscaled, 10);
+K = 1 / mag;
+D_loop_shaping = K * D_unscaled;
+
+figure('Name', 'Root Locus Comparison');
+subplot(1, 2, 1);
+rlocus(G * D_simple);
+title('Root Locus: G(s)D_{simple}(s)');
+subplot(1, 2, 2);
+rlocus(L_unscaled);
+title('Root Locus: G(s)D_{loop-shaping}(s)');
+
+figure('Name', 'Bode Plot Comparison');
+margin(G * D_simple);
+hold on;
+margin(G * D_loop_shaping);
+grid on;
+title('Open-Loop Bode Plots');
+legend('Simple Compensator', 'Loop-Shaping Compensator');
+hold off;
+
+T_simple = feedback(G * D_simple, 1);
+T_loop_shaping = feedback(G * D_loop_shaping, 1);
+figure('Name', 'Step Response Comparison');
+step(T_simple, 'b-', T_loop_shaping, 'r--');
+grid on;
+title('Closed-Loop Step Responses');
+legend('Simple Compensator', 'Loop-Shaping Compensator', 'Location', 'southeast');
