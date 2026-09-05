@@ -1,0 +1,18 @@
+% Q6
+clear; close all; clc
+d = 0.1; a = 1;
+G = RR_pade(d,2,2) * RR_tf(1,[1 a]);
+
+Kcrit  = 16.4865;
+Khalf  = Kcrit/2;
+Ktwice = Kcrit2;
+
+figure(1)
+g.R=200
+RR_nyquist(G*Khalf,g)
+axis([-4 2 -3 3])
+title(sprintf('Nyquist, K = %.3f (half critical) STABLE', Khalf))
+figure(2)
+RR_nyquist(G*Ktwice, g)
+axis([-4 2 -3 3])
+title(sprintf('Nyquist, K = %.3f (twice critical) UNSTABLE', Ktwice))
