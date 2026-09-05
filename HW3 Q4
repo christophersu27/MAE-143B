@@ -1,0 +1,18 @@
+% Q4
+clear; close all; clc
+d = 0.1; a = 1;
+G = RR_pade(d,2,2) * RR_tf(1,[1 a]);
+D = 1;
+L = G*D;
+figure(1), RR_rlocus(G*D)
+title('Root locus, D=1')
+grid on
+f_imagpart = @(w) imag(RR_evaluate(L, 1i*w));
+omega = fzero(f_imagpart, 16);
+fprintf('Crossing frequency:  omega = %.6f rad/s\n', omega)
+
+figure(2)
+D = 1*real(RR_evaluate(-1/L, 1i*omega))
+RR_rlocus(G*D)
+title('Root locus of G(s)*D, with D = -1/L(i\omega)')
+grid on
