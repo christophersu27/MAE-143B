@@ -1,0 +1,20 @@
+% Q3
+clear; close all; clc
+d = 0.1; a = 1;
+G = RR_pade(d,2,2) * RR_tf(1,[1 a]);
+D = 1;
+L = G*D;
+
+figure(1), RR_rlocus(G*D)
+title('Root locus of L(s)')
+syms s Kc
+c6 = 6/d; c12 = 12/d^2;
+charpoly = expand( (s+a)*(s^2 + c6*s + c12) + Kc*(s^2 - c6*s + c12) );
+charpoly = collect(charpoly, s);
+
+cf = coeffs(charpoly, s, 'All');
+a3 = cf(1); a2 = cf(2); a1 = cf(3); a0 = cf(4);
+b1 = (a2*a1 - a3*a0)/a2;
+Kcrit_all = double(solve(b1==0, Kc));
+Kcrit = Kcrit_all(Kcrit_all > 0);
+fprintf('\nCritical gain K:  K = %.4f\n', Kcrit)
